@@ -1,0 +1,54 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build generator",
+            "type": "shell",
+            "command": "C:/Users/Administrator/mingw64/bin/mingw32-make.exe",
+            "args": [
+                "generator"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "使用 Makefile 编译 generator.exe"
+        },
+        {
+            "label": "Build loadtest",
+            "type": "shell",
+            "command": "C:/Users/Administrator/mingw64/bin/mingw32-make.exe",
+            "args": [
+                "loadtest"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "使用 Makefile 编译 loadtest.exe"
+        },
+        {
+            "label": "Build all",
+            "type": "shell",
+            "command": "C:/Users/Administrator/mingw64/bin/mingw32-make.exe",
+            "args": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "使用 Makefile 编译所有目标"
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "C:/Users/Administrator/mingw64/bin/mingw32-make.exe",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
