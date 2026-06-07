@@ -1,7 +1,7 @@
 # Makefile for Debug Font project
 # 目标: generator (src/generator.cpp) 和 loadtest (test/loadtest.cpp)
 
-CXX      := C:/Users/Administrator/mingw64/bin/g++.exe
+CXX      := g++.exe
 CXXFLAGS := -std=c++20 -O2 -g -Wall -Wextra
 INCLUDES := -Iinclude -ISDL2-2.24.0/include -ISDL2_ttf-2.20.1/include
 LDFLAGS  := -LSDL2-2.24.0/lib/x64 -LSDL2_ttf-2.20.1/lib/x64
