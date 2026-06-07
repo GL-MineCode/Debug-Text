@@ -24,6 +24,16 @@
 
 #ifndef __INC_DECODE_
 
+/**
+ * @brief Convert a UTF-8 encoded string to a vector of Unicode codepoints
+ * 
+ * Decodes a UTF-8 string into its individual Unicode codepoints.
+ * Performs validation at each step and returns whatever has been
+ * successfully decoded so far if an invalid sequence is encountered.
+ *
+ * @param utf8_str The UTF-8 encoded input string
+ * @return std::vector<uint32_t> A vector of Unicode codepoints decoded from the input
+ */
 std::vector<uint32_t> utf8_to_codepoints_noexcept(const std::string& utf8_str) noexcept {
     std::vector<uint32_t> codepoints;
     
@@ -79,14 +89,34 @@ std::vector<uint32_t> utf8_to_codepoints_noexcept(const std::string& utf8_str) n
 
 #endif
 
+// You can replace this header with your own one.
 #include "fusionpixel_12px_mono.hpp"
 
-#define DebugFontHeight 12
-
+/**
+ * @brief Read a 4-byte integer from a byte array without alignment concerns
+ * 
+ * Interprets the first 4 bytes at the given address as a little-endian int.
+ * Used for reading the glyph count and glyph offset map from the font data.
+ *
+ * @param data Pointer to the byte array
+ * @return int The integer value read from the array
+ */
 inline int bytearray_read_int(const uint8_t* data) {
     return *(const int*)data;
 }
 
+/**
+ * @brief Create an SDL surface with rendered debug text using bitmap font
+ * 
+ * Parses the input text (supports UTF-8), computes the required surface
+ * dimensions (handling newlines and tabs), then renders each glyph from
+ * the embedded bitmap font data onto the surface with the specified color.
+ *
+ * @param text The UTF-8 text string to render
+ * @param color The foreground color for the text
+ * @return SDL_Surface* A newly created SDL surface with the rendered text,
+ *         or nullptr if the text is empty or surface creation fails
+ */
 SDL_Surface* createDBTextSurface(const char* text, const SDL_Color& color) {
     int sur_width = 0;
     int sur_height = 0;
@@ -200,6 +230,22 @@ SDL_Surface* createDBTextSurface(const char* text, const SDL_Color& color) {
     return surface;
 }
 
+/**
+ * @brief Render debug text onto an SDL renderer at the specified position
+ * 
+ * Creates a text surface via createDBTextSurface(), converts it to a texture,
+ * and copies it to the renderer. Supports scaling via ptsize and anchor-point
+ * positioning via the center parameter.
+ *
+ * @param renderer The SDL renderer to draw onto
+ * @param ux The x-coordinate of the text position (before center adjustment)
+ * @param uy The y-coordinate of the text position (before center adjustment)
+ * @param color The text color
+ * @param ptsize Scaling factor (1.0f = original font size)
+ * @param text The UTF-8 text string to render
+ * @param center Anchor point as a fraction of width/height (0,0 = top-left, 0.5,0.5 = center, 1,1 = bottom-right)
+ * @return SDL_Rect The actual rectangle of the rendered text on the renderer
+ */
 SDL_Rect paintDBText(SDL_Renderer* renderer,int ux,int uy,const SDL_Color& color,float ptsize,const char* text,const SDL_FPoint& center = {0.0f,0.0f}){
     SDL_Surface* sur = createDBTextSurface(text,color);
     if(!sur) return {-1,-1,-1,-1};
@@ -218,6 +264,23 @@ SDL_Rect paintDBText(SDL_Renderer* renderer,int ux,int uy,const SDL_Color& color
     return temp;
 }
 
+/**
+ * @brief Render formatted debug text (printf-style) onto an SDL renderer
+ * 
+ * Convenience wrapper around paintDBText() that accepts printf-style
+ * format strings with variable arguments. The formatted result is
+ * limited to 256 characters.
+ *
+ * @param renderer The SDL renderer to draw onto
+ * @param ux The x-coordinate of the text position
+ * @param uy The y-coordinate of the text position
+ * @param color The text color
+ * @param ptsize Scaling factor (1.0f = original font size)
+ * @param center Anchor point as a fraction of width/height
+ * @param text The printf-style format string
+ * @param ... Variable arguments for the format string
+ * @return SDL_Rect The actual rectangle of the rendered text on the renderer
+ */
 SDL_Rect paintDBTextFormat(SDL_Renderer* renderer, int ux, int uy, SDL_Color color, float ptsize,const SDL_FPoint& center, const char* text, ...) {
     char buffer[256];
     va_list args;

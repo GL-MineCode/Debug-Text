@@ -1,126 +1,134 @@
+Select a language | 选择语言
+
+[**简体中文**](README.md)  
+[**English**](README.en.md)  
+
 # Debug Text
 
-基于 **SDL2** 的**极简轻量级调试文本（点阵字体）绘制库**，**支持UTF-8字符集**（包括中文）
+A **minimalist and lightweight debug text (bitmap font) drawing library** based on **SDL2**, **supporting UTF-8 character sets** (including CJK)
 
-## 优点
-- 程序**无需预先加载任何字体文件**  
-- **Header-Only设计**。只需引用DebugText.hpp**马上就可以编译**，**无需多余配置**
-- **跨平台可用**
+## Advantages
+- No need to **pre-load any font files** at runtime
+- **Header-Only design**. Just include `DebugText.hpp` and **you're ready to compile**, **no extra configuration needed**
+- **Cross-platform**
 
-## 项目结构
+## Project Structure
 
 ```
 ├── src/
-│   └── generator.cpp          # 字形文件生成器主程序
+│   └── generator.cpp          # Glyph file generator main program
 ├── test/
-│   └── loadtest.cpp            # 位图字体渲染测试程序
-├── include/                    # 公共头文件
-│   ├── SDLWindowStuff.hpp      # SDL 窗口封装 (Windows DWM 支持)
-│   ├── AdvancedSDLWindow.hpp   # 高级 SDL 窗口 Win32 API 封装
-│   ├── DebugText.hpp           # 位图字体渲染引擎
-│   ├── decode.hpp              # UTF-8 解码
-│   ├── fusionpixel_12px_mono.hpp # 内嵌 12px 位图字体数据
-│   ├── GL_Commdlg.hpp          # Windows 通用对话框封装
-│   ├── GL_DWMoperations.hpp    # DWM 圆角窗口偏好设置
-│   ├── SDL_EventPlus.hpp       # SDL 事件轮询封装
-│   ├── SmoothCpp.hpp           # 数值平滑 / EMA 滤波器
-│   ├── StopWatch.hpp           # 高精度计时器
-│   ├── Times.hpp               # 帧率控制 (Timer)
-│   ├── TimeCounter.h           # 简易时间计数器
-│   └── UTF8toWide.hpp          # UTF-8 与宽字符串转换
+│   └── loadtest.cpp            # Bitmap font rendering test program
+├── include/                    # Public headers
+│   ├── SDLWindowStuff.hpp      # SDL window wrapper (Windows DWM support)
+│   ├── AdvancedSDLWindow.hpp   # Advanced SDL window Win32 API wrapper
+│   ├── DebugText.hpp           # Bitmap font rendering engine
+│   ├── decode.hpp              # UTF-8 decoder
+│   ├── fusionpixel_12px_mono.hpp # Embedded 12px bitmap font data
+│   ├── GL_Commdlg.hpp          # Windows common dialog wrapper
+│   ├── GL_DWMoperations.hpp    # DWM rounded window preference settings
+│   ├── SDL_EventPlus.hpp       # SDL event polling wrapper
+│   ├── SmoothCpp.hpp           # Numeric smoothing / EMA filter
+│   ├── StopWatch.hpp           # High-precision timer
+│   ├── Times.hpp               # Frame rate control (Timer)
+│   ├── TimeCounter.h           # Simple time counter
+│   └── UTF8toWide.hpp          # UTF-8 to wide string conversion
 ├── font/
-│   └── fusion-pixel-12px-monospaced-zh_hans.ttf  # Fusion Pixel 中文字体
+│   └── fusion-pixel-12px-monospaced-zh_hans.ttf  # Fusion Pixel CJK font
 ├── tools/
-│   └── toarray.py              # 任意文件 → C++ 字节数组 (.hpp) 转换工具
-├── SDL2-2.24.0/                # SDL2 开发库 (include / lib)
-├── SDL2_ttf-2.20.1/            # SDL2_ttf 开发库 (include / lib)
-├── Makefile                    # 构建脚本
+│   └── toarray.py              # Arbitrary file → C++ byte array (.hpp) converter
+├── SDL2-2.24.0/                # SDL2 development libraries (include / lib)
+├── SDL2_ttf-2.20.1/            # SDL2_ttf development libraries (include / lib)
+├── Makefile                    # Build script
 └── .vscode/
-    ├── launch.json             # VS Code 调试配置
-    └── tasks.json              # VS Code 构建任务
+    ├── launch.json             # VS Code debug configuration
+    └── tasks.json              # VS Code build tasks
 ```
-那些多余的hpp库是给字库生成器和演示程序用的，实际使用只需要fusionpixel_12px_mono.hpp和DebugText.hpp
 
-## 依赖
+The extra hpp libraries are for the font generator and demo program. For actual usage, you only need `fusionpixel_12px_mono.hpp` and `DebugText.hpp`.
 
-### 库本身：
+## Dependencies
 
-- **编译器:** 任意g++都可
-- **C++ 标准:** C++17及以上
-- **图形库:** SDL2
-- **链接库:** SDL2main、SDL2
-- **平台:** SDL支持哪些平台本库就支持哪些平台
+### Library itself:
 
-### 生成器和测试：
+- **Compiler:** Any g++ will do
+- **C++ Standard:** C++17 or later
+- **Graphics Library:** SDL2
+- **Link Libraries:** SDL2main, SDL2
+- **Platform:** Any platform supported by SDL2
 
-- **编译器:** MinGW-w64 (g++)
-- **C++ 标准:** C++20
-- **图形库:** SDL2、SDL2_ttf
-- **链接库:** SDL2main、SDL2、SDL2_ttf、dwmapi、imm32、comctl32、comdlg32、ole32、uuid
-- **平台:** 仅Windows
+### Generator and test program:
 
-> SDL2 和 SDL2_ttf 的开发库已包含在仓库中（`SDL2-2.24.0/`、`SDL2_ttf-2.20.1/`），无需额外下载。
+- **Compiler:** MinGW-w64 (g++)
+- **C++ Standard:** C++20
+- **Graphics Library:** SDL2, SDL2_ttf
+- **Link Libraries:** SDL2main, SDL2, SDL2_ttf, dwmapi, imm32, comctl32, comdlg32, ole32, uuid
+- **Platform:** Windows only
 
-## 构建
+> SDL2 and SDL2_ttf development libraries are included in the repository (`SDL2-2.24.0/`, `SDL2_ttf-2.20.1/`), no additional download required.
+
+## Building
 
 ```bash
-# 编译所有目标
+# Build all targets
 make
 
-# 仅编译 generator
+# Build only the generator
 make generator
 
-# 仅编译 loadtest
+# Build only the loadtest
 make loadtest
 
-# 清理构建产物
+# Clean build artifacts
 make clean
 ```
 
-构建产物输出到 `build/` 目录。
+Build output goes to the `build/` directory.
 
-### VS Code 构建
+### Building in VS Code
 
-- 按 `Ctrl+Shift+B` 选择构建任务
-- 按 `F5` 自动编译并启动调试
+- Press `Ctrl+Shift+B` to select a build task
+- Press `F5` to automatically compile and start debugging
 
-## 程序说明
+## Program Descriptions
 
-### generator — 字形文件生成器
+### generator — Glyph File Generator
 
-读取 `font/fusion-pixel-12px-monospaced-zh_hans.ttf`，遍历 Unicode BMP 范围（U+0000 ~ U+FFFF）的所有码点，将其渲染为 1 位位图并打包输出到 `font.bin`。
+Reads `font/fusion-pixel-12px-monospaced-zh_hans.ttf`, iterates over all codepoints in the Unicode BMP range (U+0000 ~ U+FFFF), renders them as 1-bit bitmaps, and packs the output into `font.bin`.
 
-**输出格式 (`font.bin`):**
+**Output format (`font.bin`):**
 
-| 偏移 | 大小 | 说明 |
-|------|------|------|
-| 0 | 4 字节 | 字形总数 (int32) |
-| 4 | 字形数 × 4 字节 | 字形索引表 (int32 数组, 每项为对应字形在文件中的偏移量) |
-| ... | 变长 | 字形数据，每项包含: 宽度(uint8)、高度(uint8)、位图压缩数据 |
+| Offset | Size | Description |
+|--------|------|-------------|
+| 0 | 4 bytes | Total number of glyphs (int32) |
+| 4 | glyph_count × 4 bytes | Glyph index table (int32 array, each entry is the offset of the corresponding glyph in the file) |
+| ... | Variable | Glyph data, each containing: width (uint8), height (uint8), bitmap compressed data |
 
-位图压缩方式：每像素 1 位，按行排列，白底为 `0`、非白底为 `1`。
+Bitmap compression: 1 bit per pixel, row-major order, white background is `0`, non-white is `1`.
 
-### loadtest — 位图字体渲染测试
+### loadtest — Bitmap Font Rendering Test
 
-使用内嵌的 12px 位图字体数据 (`fusionpixel_12px_mono.hpp`) 渲染文本，演示 `DebugText.hpp` 引擎的渲染效果。
+Uses the embedded 12px bitmap font data (`fusionpixel_12px_mono.hpp`) to render text, demonstrating the rendering capabilities of the `DebugText.hpp` engine.
 
-### tools/toarray.py — 文件转 C++ 字节数组
+### tools/toarray.py — File to C++ Byte Array Converter
 
-将任意二进制文件转换为 C++ `const uint8_t` 数组定义，用于将资源文件嵌入代码中。
+Converts any binary file into a C++ `const uint8_t` array definition for embedding resource files into code.
 
 ```bash
 python tools/toarray.py
 ```
 
-## 许可
+## License
 
-- 本项目遵循MIT协议
-- 字体 `fusion-pixel-12px-monospaced-zh_hans.ttf` 来源于 [Fusion Pixel](https://github.com/TakWolf/fusion-pixel-font)，基于 OFL 许可（参见 `font/LICENSE-OFL`）。
+- This project is licensed under the MIT License
+- The font `fusion-pixel-12px-monospaced-zh_hans.ttf` is from [Fusion Pixel](https://github.com/TakWolf/fusion-pixel-font), licensed under OFL (see `font/LICENSE-OFL`).
 
-## 闲谈
-本来是想使用STM32给液晶屏幕绘制文本，但是默认的库只支持英文，索性手动做了一个字库  
-做完后突然发现这招可以用到平时的开发中，不用提前加载字体文件实在方便很多！  
-于是这款库就诞生了
+## Backstory
 
-## 在ImGui里面使用
-理论可以，但我不喜欢用ImGui所以有闲心的大佬可以自行写适配
+Originally, I wanted to render text on an STM32 LCD screen, but the default library only supports English, so I decided to make a font bitmap myself.  
+After finishing it, I realized this approach could also be useful in everyday development — not having to load font files in advance is really convenient!  
+And thus this library was born.
+
+## Using with ImGui
+
+Theoretically possible, but I'm not a fan of ImGui, so if anyone is interested, feel free to write an adapter.
