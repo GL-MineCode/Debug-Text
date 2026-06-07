@@ -1,7 +1,7 @@
 Select a language | 选择语言
 
-[**简体中文**](README.md)  
-[**English**](README.en.md)  
+[**简体中文**](README_cn.md)  
+[**English**](README.md)  
 
 # Debug Text
 
